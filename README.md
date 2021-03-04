@@ -39,8 +39,8 @@ There is sample data I hard-coded in order to test queries.
 
 ## Queries
 There are 17 queries I wrote to process the data.  
-All of these queries will be shown in the Live Video Demo.  
-Otherwise they are included in the SQL script in this repository.
+They will all be shown in the Live Video Demo.  
+Otherwise they are included as part of the whole SQL script in this repository.
 <br>
 <br>
 
@@ -51,5 +51,4 @@ Click [here]() for a live demonstration of the database.
 ## Conclusion  
 This application was created as a final project for my Microsoft SQL Server course in college.    
 I hope you got a chance to check out the live video demonstration in the links provided.  
-The script for the project is included in this repository.  
 Thank you for your time!
