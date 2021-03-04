@@ -30,6 +30,11 @@ __Create tables screenshot:__
 __Foreign key constraints screenshot:__  
 <img src="Images/Construction_DB_Pic4.png" width="650" > 
 <br>
+<br>  
+
+## Data  
+There is sample data I hard-coded in order to test queries.
+<br>
 <br>
 
 ## Queries
