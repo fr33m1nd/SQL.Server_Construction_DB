@@ -1,8 +1,6 @@
 --
 -- Abstract: This database is used for keeping records for a construction company
 --			 to help maintain orderly, productive flow of business. 
---			 Database includes:
---			  
 --							 
 -- Author: Derrick Warren			  
 -- --------------------------------------------------------------------------------
@@ -369,16 +367,16 @@ VALUES	 (1, 1, 1 )
 -- --------------------------------------------------------------------------------
 		
 SELECT * FROM Tcustomers
---UPDATE
---	 TCustomers
---SET
---	 strAddress = '121 Martin Ct.'
---	,strCity = 'Norwood'
---	,strZip = '45222'
---	,intStateID = '1'
---WHERE
---	 TCustomers.strLastName = 'Frazer'
---SELECT * FROM Tcustomers
+UPDATE
+	 TCustomers
+SET
+	 strAddress = '121 Martin Ct.'
+	,strCity = 'Norwood'
+	,strZip = '45222'
+	,intStateID = '1'
+WHERE
+	 TCustomers.strLastName = 'Frazer'
+SELECT * FROM Tcustomers
 	 
 
 -- --------------------------------------------------------------------------------
@@ -388,13 +386,13 @@ SELECT * FROM Tcustomers
 -- --------------------------------------------------------------------------------
 
 SELECT * FROM TWorkers
---UPDATE
---	 TWorkers
---SET
---	 monHourlyRate = monHourlyRate + 2.00
---WHERE
---	 DATEDIFF(MONTH, dtmHireDate, GETDATE()) > 12;
---SELECT * FROM TWorkers
+UPDATE
+	 TWorkers
+SET
+	 monHourlyRate = monHourlyRate + 2.00
+WHERE
+	 DATEDIFF(MONTH, dtmHireDate, GETDATE()) > 12;
+SELECT * FROM TWorkers
 
 
 -- --------------------------------------------------------------------------------
@@ -403,11 +401,11 @@ SELECT * FROM TWorkers
 -- --------------------------------------------------------------------------------
 
 SELECT * FROM TJobs
---DELETE 
---	 TJobs
---WHERE
---	TJobs.intJobID = 9
---SELECT * FROM TJobs
+DELETE 
+	 TJobs
+WHERE
+	TJobs.intJobID = 9
+SELECT * FROM TJobs
 
 
 -- --------------------------------------------------------------------------------
@@ -602,7 +600,7 @@ CREATE VIEW vJobLaborCosts
 AS
 SELECT	 TJ.intJobID AS JobID, TJ.strJobDesc AS JobDescription
 		,TC.intCustomerID AS CustomerID, TC.strLastName + ', ' + TC.strFirstName AS CustomerName
-		,SUM(TW.monHourlyRate * TJW.intHoursWorked) AS LaborCost
+		,ISNULL(SUM(TW.monHourlyRate * TJW.intHoursWorked), 0) AS LaborCost
 FROM
 		 TJobs AS TJ LEFT JOIN TJobWorkers AS TJW
 			ON TJ.intJobID = TJW.intJobID
@@ -625,15 +623,15 @@ SELECT * FROM vJobLaborCosts
 
 
 -- --------------------------------------------------------------------------------
--- Use the View from 4.8 to create a query that includes the total 
+-- Use the View created to write a query that includes the total 
 -- labor cost for each customer. Order by Customer ID. 
 -- --------------------------------------------------------------------------------
 
 SELECT	 vJobLaborCosts.CustomerID
 		,vJobLaborCosts.CustomerName
-		,vJobLaborCosts.JobID
+		,vJobLaborCosts.JobID						
 		,vJobLaborCosts.JobDescription
-		,FORMAT(SUM(vJobLaborCosts.LaborCost),'c') AS LaborCost
+		,FORMAT(ISNULL(SUM(vJobLaborCosts.LaborCost), 0), 'c') AS LaborCost
 FROM
 		 vJobLaborCosts
 GROUP BY
@@ -679,9 +677,7 @@ FROM
 		 TStatuses AS TS JOIN TJOBS AS TJ
 			ON TS.intStatusID = TJ.intStatusID
 WHERE
-		 DATEDIFF(MONTH, TJ.dtmStartDate + TJ.dtmEndDate, GETDATE()) < 1
-
--- Could not figure out how to get it within same month. I only wrote it as within value of 1 month. 
+		 DATEPART(MONTH, TJ.dtmStartDate) = DATEPART(MONTH, TJ.dtmEndDate) 
 
 -- --------------------------------------------------------------------------------
 -- Create a query to list workers that worked on three or more jobs 
@@ -753,7 +749,7 @@ ORDER BY
 -- Labor costs + 30% Profit. 
 -- --------------------------------------------------------------------------------
 
-SELECT	 TJ.intJobID
+SELECT	 TJ.intJobID AS JobID
 		,FORMAT((ISNULL(SUM(TM.monCost * TJM.intQuantity), 0) + ISNULL(SUM(TW.monHourlyRate * TJW.intHoursWorked), 0)) * (1 + .30), 'c') AS TotalCustomerCharge
 		,TC.intCustomerID, TC.strLastName + ', ' + TC.strFirstName AS CustomerName
 FROM
@@ -787,7 +783,7 @@ ORDER BY
 -- --------------------------------------------------------------------------------
  
 SELECT	 TV.intVendorID AS VendorID
-        ,TJ.intJobID AS JobID
+        ,ISNULL(CAST(TJ.intJobID AS VARCHAR), 'N/A') AS JobID		
 		,ISNULL(TJ.strJobDesc, 'N/A') AS JobDescription
 		,FORMAT(ISNULL(SUM(TM.monCost * TJM.intQuantity), 0), 'c') VendorCost
 FROM
