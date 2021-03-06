@@ -1,5 +1,5 @@
 # Construction Company Database  
-[Live Video Demo]()
+[Live Video Demo](https://www.youtube.com/embed/ljADcD93roU)
 
 ---
 
@@ -45,7 +45,7 @@ Otherwise they are included as part of the whole SQL script in this repository.
 <br>
 
 ## Live Video Demo  
-Click [here]() for a live demonstration of the database.  
+Click [here](https://www.youtube.com/embed/ljADcD93roU) for a live demonstration of the database.  
 <br>
 
 ## Conclusion  
